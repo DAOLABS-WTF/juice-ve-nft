@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.6;
+pragma solidity ^0.8.6;
 
 import '@openzeppelin/contracts/access/Ownable.sol';
 import '@openzeppelin/contracts/utils/math/SafeMath.sol';
@@ -77,7 +77,7 @@ contract JBVeTokenUriResolver is IJBVeTokenUriResolver, Ownable {
   */
   function _getTokenRange(uint256 _amount) private pure returns (uint256) {
     // Reduce amount to exclude decimals
-    _amount = _amount / 10**decimals;
+    _amount = _amount / 10 ** decimals;
 
     if (_amount < 100) {
       return 0;
@@ -209,11 +209,10 @@ contract JBVeTokenUriResolver is IJBVeTokenUriResolver, Ownable {
      The Staking durations below were gleaned from the JBVeNft.sol contract line 55-59.
      Returns the duration multiplier used to index into the proper veBanny mediallion on IPFS.
   */
-  function _getTokenStakeMultiplier(uint256 _duration, uint256[] memory _lockDurationOptions)
-    private
-    pure
-    returns (uint256)
-  {
+  function _getTokenStakeMultiplier(
+    uint256 _duration,
+    uint256[] memory _lockDurationOptions
+  ) private pure returns (uint256) {
     for (uint256 _i = 0; _i < _lockDurationOptions.length; ) {
       if (_lockDurationOptions[_i] == _duration) return _i + 1;
       unchecked {

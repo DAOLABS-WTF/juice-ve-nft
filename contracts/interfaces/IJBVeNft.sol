@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.6;
+pragma solidity ^0.8.6;
 
-import '@jbx-protocol/contracts-v2/contracts/interfaces/IJBTokenStore.sol';
-import '@jbx-protocol/contracts-v2/contracts/interfaces/IJBOperatorStore.sol';
+import '@jbx-protocol/juice-contracts-v3/contracts/interfaces/IJBTokenStore.sol';
+import '@jbx-protocol/juice-contracts-v3/contracts/interfaces/IJBOperatorStore.sol';
 import './IJBVeTokenUriResolver.sol';
 import './../structs/JBAllowPublicExtensionData.sol';
 import './../structs/JBLockExtensionData.sol';
@@ -22,7 +22,9 @@ interface IJBVeNft {
 
   function uriResolver() external view returns (IJBVeTokenUriResolver);
 
-  function getSpecs(uint256 _tokenId)
+  function getSpecs(
+    uint256 _tokenId
+  )
     external
     view
     returns (
@@ -44,12 +46,13 @@ interface IJBVeNft {
 
   function unlock(JBUnlockData[] calldata _unlockData) external;
 
-  function extendLock(JBLockExtensionData[] calldata _lockExtensionData)
-    external
-    returns (uint256[] memory newTokenIds);
+  function extendLock(
+    JBLockExtensionData[] calldata _lockExtensionData
+  ) external returns (uint256[] memory newTokenIds);
 
-  function setAllowPublicExtension(JBAllowPublicExtensionData[] calldata _allowPublicExtensionData)
-    external;
+  function setAllowPublicExtension(
+    JBAllowPublicExtensionData[] calldata _allowPublicExtensionData
+  ) external;
 
   function redeem(JBRedeemData[] calldata _redeemData) external;
 

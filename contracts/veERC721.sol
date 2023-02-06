@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Solidity and NFT version of Curve Finance - VotingEscrow
 // (https://github.com/curvefi/curve-dao-contracts/blob/master/contracts/VotingEscrow.vy)
-pragma solidity 0.8.6;
+pragma solidity ^0.8.6;
 
 // Converted into solidity by:
 // Primary Author(s)
@@ -66,7 +66,7 @@ abstract contract veERC721 is ERC721Enumerable, IVotes {
 
   uint256 public constant WEEK = 7 * 86400; // all future times are rounded by week
   int128 public constant MAXTIME = 3 * 365 * 86400; // 3 years
-  uint256 public constant MULTIPLIER = 10**18;
+  uint256 public constant MULTIPLIER = 10 ** 18;
 
   // We cannot really do block numbers per se b/c slope is per time, not per block
   // and per block could be fairly bad b/c Ethereum changes blocktimes.
@@ -117,20 +117,19 @@ abstract contract veERC721 is ERC721Enumerable, IVotes {
     @param _account account to calculate
     @param _block Block to calculate the voting power at
   */
-  function getPastVotes(address _account, uint256 _block)
-    public
-    view
-    virtual
-    override
-    returns (uint256 votingPower)
-  {
-    for (uint256 _i; _i < _receivedVotingPower[_account].length;) {
+  function getPastVotes(
+    address _account,
+    uint256 _block
+  ) public view virtual override returns (uint256 votingPower) {
+    for (uint256 _i; _i < _receivedVotingPower[_account].length; ) {
       uint256 _tokenId = _receivedVotingPower[_account][_i];
       uint256 _count = _historicVotingPower[_tokenId].length;
 
       // Should never happen, but just in case
       if (_count == 0) {
-        unchecked { ++_i; }
+        unchecked {
+          ++_i;
+        }
         continue;
       }
 
@@ -147,7 +146,9 @@ abstract contract veERC721 is ERC721Enumerable, IVotes {
         } else {
           _max = _mid - 1;
         }
-        unchecked { ++_j; }
+        unchecked {
+          ++_j;
+        }
       }
 
       // Check if `_account` owned the token at `_block`, if so calculate the voting power
@@ -155,7 +156,9 @@ abstract contract veERC721 is ERC721Enumerable, IVotes {
       if (_voting_power.receivedAtBlock <= _block && _voting_power.account == _account) {
         votingPower += tokenVotingPowerAt(_tokenId, _block);
       }
-      unchecked { ++_i; }
+      unchecked {
+        ++_i;
+      }
     }
   }
 
@@ -178,7 +181,7 @@ abstract contract veERC721 is ERC721Enumerable, IVotes {
     uint256 _max = tokenPointEpoch[_tokenId];
 
     // Will be always enough for 128-bit numbers
-    for (uint256 i = 0; i < 128;) {
+    for (uint256 i = 0; i < 128; ) {
       if (_min >= _max) {
         break;
       }
@@ -188,7 +191,9 @@ abstract contract veERC721 is ERC721Enumerable, IVotes {
       } else {
         _max = _mid - 1;
       }
-      unchecked { ++i; }
+      unchecked {
+        ++i;
+      }
     }
 
     Point memory upoint = tokenPointHistory[_tokenId][_min];
@@ -259,7 +264,8 @@ abstract contract veERC721 is ERC721Enumerable, IVotes {
   function _beforeTokenTransfer(
     address _from,
     address _to,
-    uint256 _tokenId
+    uint256 _tokenId,
+    uint256
   ) internal virtual override {
     // Make sure this is not a mint
     if (_from != address(0)) {
@@ -278,7 +284,7 @@ abstract contract veERC721 is ERC721Enumerable, IVotes {
     }
 
     // Register/unregister in ERC721Enumerable
-    return super._beforeTokenTransfer(_from, _to, _tokenId);
+    return super._beforeTokenTransfer(_from, _to, _tokenId, 1);
   }
 
   /**
@@ -350,7 +356,7 @@ abstract contract veERC721 is ERC721Enumerable, IVotes {
 
     // Go over weeks to fill history and calculate what the current point is
     uint256 t_i = (last_checkpoint / WEEK) * WEEK;
-    for (uint256 i = 0; i < 255;) {
+    for (uint256 i = 0; i < 255; ) {
       // Hopefully it won't happen that this won't get used in 4 years!
       // If it does, users will be able to withdraw but vote weight will be broken
       t_i += WEEK;
@@ -381,7 +387,9 @@ abstract contract veERC721 is ERC721Enumerable, IVotes {
       } else {
         pointHistory[_epoch] = last_point;
       }
-      unchecked { ++i; }
+      unchecked {
+        ++i;
+      }
     }
 
     epoch = _epoch;
@@ -436,11 +444,7 @@ abstract contract veERC721 is ERC721Enumerable, IVotes {
    * @param _bias from unew
    * @param _slope from unew
    */
-  function _checkpointPartTwo(
-    uint256 _tokenId,
-    int128 _bias,
-    int128 _slope
-  ) internal {
+  function _checkpointPartTwo(uint256 _tokenId, int128 _bias, int128 _slope) internal {
     uint256 token_epoch = tokenPointEpoch[_tokenId] + 1;
 
     tokenPointEpoch[_tokenId] = token_epoch;
@@ -458,11 +462,7 @@ abstract contract veERC721 is ERC721Enumerable, IVotes {
     @param _duration the duration of the lock (for the UI and uriresolver, not actually used)
     @param _end the new end time
   */
-  function _extendLock(
-    uint256 _tokenId,
-    uint256 _duration,
-    uint256 _end
-  ) internal {
+  function _extendLock(uint256 _tokenId, uint256 _duration, uint256 _end) internal {
     // Round end date down to week
     _end = (_end / WEEK) * WEEK;
     // Get the current lock info
@@ -569,7 +569,7 @@ abstract contract veERC721 is ERC721Enumerable, IVotes {
     uint256 _max = max_epoch;
 
     // Will be always enough for 128-bit numbers
-    for (uint256 i = 0; i < 128;) {
+    for (uint256 i = 0; i < 128; ) {
       if (_min >= _max) {
         break;
       }
@@ -579,7 +579,9 @@ abstract contract veERC721 is ERC721Enumerable, IVotes {
       } else {
         _max = _mid - 1;
       }
-      unchecked { ++i; }
+      unchecked {
+        ++i;
+      }
     }
 
     return _min;
@@ -595,7 +597,7 @@ abstract contract veERC721 is ERC721Enumerable, IVotes {
     Point memory last_point = point;
     uint256 t_i = (last_point.ts / WEEK) * WEEK;
 
-    for (uint256 i = 0; i < 255;) {
+    for (uint256 i = 0; i < 255; ) {
       t_i += WEEK;
       int128 d_slope = 0;
       if (t_i > t) {
@@ -609,7 +611,9 @@ abstract contract veERC721 is ERC721Enumerable, IVotes {
       }
       last_point.slope += d_slope;
       last_point.ts = t_i;
-      unchecked { ++i; }
+      unchecked {
+        ++i;
+      }
     }
 
     if (last_point.bias < 0) {
@@ -642,13 +646,15 @@ abstract contract veERC721 is ERC721Enumerable, IVotes {
     // To lower gas usage we check if this token has already been owned by the user at some point
     bool _alreadyRegistered;
     if (!_forceRegister) {
-      for (uint256 _i; _i < _receivedVotingPower[_account].length;) {
+      for (uint256 _i; _i < _receivedVotingPower[_account].length; ) {
         uint256 _currentTokenId = _receivedVotingPower[_account][_i];
         if (_tokenId == _currentTokenId) {
           _alreadyRegistered = true;
           break;
         }
-        unchecked { ++_i; }
+        unchecked {
+          ++_i;
+        }
       }
     }
 

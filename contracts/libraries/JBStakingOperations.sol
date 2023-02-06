@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.6;
+pragma solidity ^0.8.6;
 
 library JBStakingOperations {
   uint256 public constant DEPLOY_VE_NFT = 20;

@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.6;
+pragma solidity ^0.8.6;
 
 import '@openzeppelin/contracts/access/Ownable.sol';
 import '@openzeppelin/contracts/security/ReentrancyGuard.sol';
-import '@jbx-protocol/contracts-v2/contracts/abstract/JBOperatable.sol';
+import '@jbx-protocol/juice-contracts-v3/contracts/abstract/JBOperatable.sol';
 import './veERC721.sol';
 import './interfaces/IJBVeNft.sol';
 import './interfaces/IJBVeTokenUriResolver.sol';
@@ -164,7 +164,9 @@ contract JBVeNft is IJBVeNft, veERC721, Ownable, ReentrancyGuard, JBOperatable {
     @return useJbToken If the locked tokens are JBTokens. 
     @return allowPublicExtension If the locked position can be extended by anyone. 
   */
-  function getSpecs(uint256 _tokenId)
+  function getSpecs(
+    uint256 _tokenId
+  )
     public
     view
     override
@@ -217,9 +219,11 @@ contract JBVeNft is IJBVeNft, veERC721, Ownable, ReentrancyGuard, JBOperatable {
 
     // Make sure no durationOption is longer than the max time
     uint256 _maxTime = uint256(uint128(MAXTIME));
-    for (uint256 _i; _i < _lockDurationOptions.length;) {
-       if (_lockDurationOptions[_i] > _maxTime) revert EXCEEDS_MAX_LOCK_DURATION();
-       unchecked { ++_i; }
+    for (uint256 _i; _i < _lockDurationOptions.length; ) {
+      if (_lockDurationOptions[_i] > _maxTime) revert EXCEEDS_MAX_LOCK_DURATION();
+      unchecked {
+        ++_i;
+      }
     }
 
     _transferOwnership(_owner);
@@ -263,7 +267,7 @@ contract JBVeNft is IJBVeNft, veERC721, Ownable, ReentrancyGuard, JBOperatable {
       // If a token wasn't set when this contract was deployed but is set now, set it.
       if (token == address(0) && tokenStore.tokenOf(projectId) != IJBToken(address(0))) {
         token = address(tokenStore.tokenOf(projectId));
-       // The project's token must not have changed since this token was originally set.
+        // The project's token must not have changed since this token was originally set.
       } else if (address(tokenStore.tokenOf(projectId)) != token) revert TOKEN_MISMATCH();
     }
 
@@ -272,7 +276,7 @@ contract JBVeNft is IJBVeNft, veERC721, Ownable, ReentrancyGuard, JBOperatable {
 
     // Increment the number of ve positions that have been minted.
     // Has to start at 1, since 0 is the id for non-token global checkpoints
-    unchecked{
+    unchecked {
       tokenId = ++count;
     }
 
@@ -320,7 +324,7 @@ contract JBVeNft is IJBVeNft, veERC721, Ownable, ReentrancyGuard, JBOperatable {
     @param _unlockData An array of banny tokens to be burnt in exchange of the locked tokens.
   */
   function unlock(JBUnlockData[] calldata _unlockData) external override nonReentrant {
-    for (uint256 _i; _i < _unlockData.length;) {
+    for (uint256 _i; _i < _unlockData.length; ) {
       // Verify that the sender has permission to unlock this tokenId
       _requirePermission(ownerOf(_unlockData[_i].tokenId), projectId, JBStakingOperations.UNLOCK);
 
@@ -342,7 +346,9 @@ contract JBVeNft is IJBVeNft, veERC721, Ownable, ReentrancyGuard, JBOperatable {
 
       // Emit event.
       emit Unlock(_unlockData[_i].tokenId, _unlockData[_i].beneficiary, _amount, msg.sender);
-      unchecked { ++_i; }
+      unchecked {
+        ++_i;
+      }
     }
   }
 
@@ -357,15 +363,12 @@ contract JBVeNft is IJBVeNft, veERC721, Ownable, ReentrancyGuard, JBOperatable {
 
     @return newTokenIds An array of the new token ids (in the same order as _lockExtensionData)
   */
-  function extendLock(JBLockExtensionData[] calldata _lockExtensionData)
-    external
-    override
-    nonReentrant
-    returns (uint256[] memory newTokenIds)
-  {
+  function extendLock(
+    JBLockExtensionData[] calldata _lockExtensionData
+  ) external override nonReentrant returns (uint256[] memory newTokenIds) {
     newTokenIds = new uint256[](_lockExtensionData.length);
 
-    for (uint256 _i; _i < _lockExtensionData.length;) {
+    for (uint256 _i; _i < _lockExtensionData.length; ) {
       // Get a reference to the extension being iterated.
       JBLockExtensionData calldata _data = _lockExtensionData[_i];
 
@@ -390,7 +393,9 @@ contract JBVeNft is IJBVeNft, veERC721, Ownable, ReentrancyGuard, JBOperatable {
       newTokenIds[_i] = _data.tokenId;
 
       emit ExtendLock(_data.tokenId, _data.tokenId, _data.updatedDuration, _newEndDate, msg.sender);
-      unchecked { ++_i; }
+      unchecked {
+        ++_i;
+      }
     }
   }
 
@@ -403,12 +408,10 @@ contract JBVeNft is IJBVeNft, veERC721, Ownable, ReentrancyGuard, JBOperatable {
 
     @param _allowPublicExtensionData An array of locks to extend.
   */
-  function setAllowPublicExtension(JBAllowPublicExtensionData[] calldata _allowPublicExtensionData)
-    external
-    override
-    nonReentrant
-  {
-    for (uint256 _i; _i < _allowPublicExtensionData.length;) {
+  function setAllowPublicExtension(
+    JBAllowPublicExtensionData[] calldata _allowPublicExtensionData
+  ) external override nonReentrant {
+    for (uint256 _i; _i < _allowPublicExtensionData.length; ) {
       // Get a reference to the extension being iterated.
       JBAllowPublicExtensionData calldata _data = _allowPublicExtensionData[_i];
 
@@ -427,7 +430,9 @@ contract JBVeNft is IJBVeNft, veERC721, Ownable, ReentrancyGuard, JBOperatable {
       locked[_data.tokenId].allowPublicExtension = _data.allowPublicExtension;
 
       emit SetAllowPublicExtension(_data.tokenId, _data.allowPublicExtension, msg.sender);
-      unchecked { ++_i; }
+      unchecked {
+        ++_i;
+      }
     }
   }
 
@@ -441,7 +446,7 @@ contract JBVeNft is IJBVeNft, veERC721, Ownable, ReentrancyGuard, JBOperatable {
     @param _redeemData An array of NFTs to redeem.
   */
   function redeem(JBRedeemData[] calldata _redeemData) external override nonReentrant {
-    for (uint256 _i; _i < _redeemData.length;) {
+    for (uint256 _i; _i < _redeemData.length; ) {
       // Get a reference to the redeemItem being iterated.
       JBRedeemData calldata _data = _redeemData[_i];
       // Get a reference to the owner of the position.
@@ -477,7 +482,9 @@ contract JBVeNft is IJBVeNft, veERC721, Ownable, ReentrancyGuard, JBOperatable {
         _data.memo,
         msg.sender
       );
-      unchecked { ++_i; }
+      unchecked {
+        ++_i;
+      }
     }
   }
 
@@ -505,9 +512,11 @@ contract JBVeNft is IJBVeNft, veERC721, Ownable, ReentrancyGuard, JBOperatable {
     @return A flag.
   */
   function _isLockDurationAcceptable(uint256 _duration) private view returns (bool) {
-    for (uint256 _i; _i < _lockDurationOptions.length;) {
+    for (uint256 _i; _i < _lockDurationOptions.length; ) {
       if (_lockDurationOptions[_i] == _duration) return true;
-      unchecked { ++_i; }
+      unchecked {
+        ++_i;
+      }
     }
     return false;
   }

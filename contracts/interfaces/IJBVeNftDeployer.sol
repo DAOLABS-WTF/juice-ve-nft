@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.6;
+pragma solidity ^0.8.6;
 
-import '@jbx-protocol/contracts-v2/contracts/interfaces/IJBProjects.sol';
-import '@jbx-protocol/contracts-v2/contracts/interfaces/IJBTokenStore.sol';
-import '@jbx-protocol/contracts-v2/contracts/interfaces/IJBOperatorStore.sol';
+import '@jbx-protocol/juice-contracts-v3/contracts/interfaces/IJBProjects.sol';
+import '@jbx-protocol/juice-contracts-v3/contracts/interfaces/IJBTokenStore.sol';
+import '@jbx-protocol/juice-contracts-v3/contracts/interfaces/IJBOperatorStore.sol';
 import './IJBVeTokenUriResolver.sol';
 import './IJBVeNft.sol';
 
