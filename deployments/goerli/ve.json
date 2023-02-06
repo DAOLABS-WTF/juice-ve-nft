@@ -1,0 +1,168 @@
+{
+    "goerli": {},
+    "constants": {},
+    "hardhat": {
+        "JBVeNftDeployer": {
+            "address": "0x3f4d84FCAcBab807ac46BbC6E22ddDE366AE9120",
+            "args": [
+                "0xE3468AE0EC1b8380f5Ad28304EE990cf470565B8",
+                "0xb352398671Bc178f078891caDd13c58bd224A8d1"
+            ],
+            "abi": [
+                {
+                    "type": "constructor",
+                    "payable": false,
+                    "inputs": [
+                        {
+                            "type": "address",
+                            "name": "_projects"
+                        },
+                        {
+                            "type": "address",
+                            "name": "_operatorStore"
+                        }
+                    ]
+                },
+                {
+                    "type": "error",
+                    "name": "UNAUTHORIZED",
+                    "inputs": []
+                },
+                {
+                    "type": "event",
+                    "anonymous": false,
+                    "name": "DeployVeNft",
+                    "inputs": [
+                        {
+                            "type": "address",
+                            "name": "jbVeNft",
+                            "indexed": false
+                        },
+                        {
+                            "type": "uint256",
+                            "name": "projectId",
+                            "indexed": true
+                        },
+                        {
+                            "type": "string",
+                            "name": "name",
+                            "indexed": false
+                        },
+                        {
+                            "type": "string",
+                            "name": "symbol",
+                            "indexed": false
+                        },
+                        {
+                            "type": "address",
+                            "name": "uriResolver",
+                            "indexed": false
+                        },
+                        {
+                            "type": "address",
+                            "name": "tokenStore",
+                            "indexed": false
+                        },
+                        {
+                            "type": "address",
+                            "name": "operatorStore",
+                            "indexed": false
+                        },
+                        {
+                            "type": "uint256[]",
+                            "name": "lockDurationOptions",
+                            "indexed": false
+                        },
+                        {
+                            "type": "address",
+                            "name": "owner",
+                            "indexed": false
+                        },
+                        {
+                            "type": "address",
+                            "name": "caller",
+                            "indexed": false
+                        }
+                    ]
+                },
+                {
+                    "type": "function",
+                    "name": "deployVeNFT",
+                    "constant": false,
+                    "payable": false,
+                    "gas": 99000000,
+                    "inputs": [
+                        {
+                            "type": "uint256",
+                            "name": "_projectId"
+                        },
+                        {
+                            "type": "string",
+                            "name": "_name"
+                        },
+                        {
+                            "type": "string",
+                            "name": "_symbol"
+                        },
+                        {
+                            "type": "address",
+                            "name": "_uriResolver"
+                        },
+                        {
+                            "type": "address",
+                            "name": "_tokenStore"
+                        },
+                        {
+                            "type": "address",
+                            "name": "_operatorStore"
+                        },
+                        {
+                            "type": "uint256[]",
+                            "name": "_lockDurationOptions"
+                        },
+                        {
+                            "type": "address",
+                            "name": "_owner"
+                        }
+                    ],
+                    "outputs": [
+                        {
+                            "type": "address",
+                            "name": "veNft"
+                        }
+                    ]
+                },
+                {
+                    "type": "function",
+                    "name": "operatorStore",
+                    "constant": true,
+                    "stateMutability": "view",
+                    "payable": false,
+                    "gas": 99000000,
+                    "inputs": [],
+                    "outputs": [
+                        {
+                            "type": "address"
+                        }
+                    ]
+                },
+                {
+                    "type": "function",
+                    "name": "projects",
+                    "constant": true,
+                    "stateMutability": "view",
+                    "payable": false,
+                    "gas": 99000000,
+                    "inputs": [],
+                    "outputs": [
+                        {
+                            "type": "address"
+                        }
+                    ]
+                }
+            ],
+            "verified": false,
+            "type": "JBVeNftDeployer"
+        }
+    }
+}
